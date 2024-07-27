@@ -24,3 +24,7 @@ tasks:
   apply:
     cmds:
     - terraform apply -input=false -auto-approve
+  
+  destroy:
+    cmds:
+    - terraform destroy -input=false -auto-approve
