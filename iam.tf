@@ -28,7 +28,7 @@ resource "aws_iam_role_policy" "sagemaker_policy" {
           "s3:PutObject",
           "s3:ListBucket"
         ]
-        Effect   = "Allow"
+        Effect = "Allow"
         Resource = [
           aws_s3_bucket.anom_detect_logs.arn,
           "${aws_s3_bucket.anom_detect_logs.arn}/*"
