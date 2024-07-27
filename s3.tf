@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "anom_detect_logs" {
-  bucket = "${local.name_prefix}-logs-bucket"
+  bucket        = "${local.name_prefix}-logs-bucket"
   force_destroy = true
 }
 
