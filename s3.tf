@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "anom_detect_logs" {
-  bucket = "${var.environment}-${local.project_name}-logs-bucket"
+  bucket = "${local.name_prefix}-logs-bucket"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_at_rest" {

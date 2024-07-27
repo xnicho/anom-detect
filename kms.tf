@@ -1,4 +1,4 @@
 resource "aws_kms_key" "master_key" {
-  description             = "This key is used to encrypt bucket objects"
+  description             = "Primary encryption key"
   deletion_window_in_days = 10
 }

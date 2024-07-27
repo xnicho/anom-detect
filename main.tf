@@ -12,5 +12,5 @@ provider "aws" {
 }
 
 locals {
-  project_name = "anom-detect"
+  name_prefix = "${var.project_name}-${var.environment}"
 }
