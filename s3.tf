@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "anom_detect_logs" {
-  bucket = "${var.environment}-${locals.project_name}-logs-bucket"
+  bucket = "${var.environment}-${local.project_name}-logs-bucket"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_at_rest" {
@@ -13,12 +13,12 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_at_rest" 
   }
 }
 
-resource "aws_s3_bucket_policy" "enyption_in_transit_policy" {
+resource "aws_s3_bucket_policy" "anom_detect_logs_policy" {
   bucket = aws_s3_bucket.anom_detect_logs.id
-  policy = data.aws_iam_policy_document.encrypt_in_tranit.json
+  policy = data.aws_iam_policy_document.anom_detect_logs_policy_document.json
 }
 
-data "aws_iam_policy_document" "anom_detect_logs_policy" {
+data "aws_iam_policy_document" "anom_detect_logs_policy_document" {
   statement {
     sid    = "DenyInsecureTransport"
     effect = "Deny"
@@ -28,8 +28,8 @@ data "aws_iam_policy_document" "anom_detect_logs_policy" {
     ]
 
     resources = [
-      aws_s3_bucket.anom_detect_bucket.arn,
-      "${aws_s3_bucket.anom_detect_bucket.arn}/*"
+      aws_s3_bucket.anom_detect_logs.arn,
+      "${aws_s3_bucket.anom_detect_logs.arn}/*"
     ]
 
     condition {
@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "anom_detect_logs_policy" {
     ]
 
     resources = [
-      aws_s3_bucket.anom_detect_bucket.arn
+      aws_s3_bucket.anom_detect_logs.arn
     ]
 
     principals {
@@ -71,7 +71,7 @@ data "aws_iam_policy_document" "anom_detect_logs_policy" {
     ]
 
     resources = [
-      "${aws_s3_bucket.anom_detect_bucket.arn}/*"
+      "${aws_s3_bucket.anom_detect_logs.arn}/*"
     ]
 
     principals {
