@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "anom_detect_logs" {
   bucket = "${local.name_prefix}-logs-bucket"
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_at_rest" {
