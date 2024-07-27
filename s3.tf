@@ -89,3 +89,8 @@ data "aws_iam_policy_document" "anom_detect_logs_policy_document" {
     }
   }
 }
+
+resource "aws_s3_bucket" "sagemaker_bucket" {
+  bucket        = "${local.name_prefix}-sagemaker-bucket"
+  force_destroy = true
+}
