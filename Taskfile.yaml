@@ -1,0 +1,26 @@
+Version: '3'
+
+tasks:
+  init:
+    cmds:
+    - terraform init
+
+  validate:
+    cmds:
+    - terraform validate
+  
+  check:
+    cmds:
+    - terraform fmt -list=true -recursive
+
+  fmt:
+    cmds:
+    - terraform fmt -recursive
+
+  plan:
+    cmds:
+    - terraform plan -input=false
+
+  apply:
+    cmds:
+    - terraform apply -input=false -auto-approve
