@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "anom_detect_logs" {
-  bucket = "${locals.project_name}-${var.environment}"
+  bucket = "${var.environment}-${locals.project_name}-logs-bucket"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_at_rest" {
@@ -13,12 +13,12 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_at_rest" 
   }
 }
 
-resource "aws_s3_bucket_policy" "enyption_in_transit" {
+resource "aws_s3_bucket_policy" "enyption_in_transit_policy" {
   bucket = aws_s3_bucket.anom_detect_logs.id
   policy = data.aws_iam_policy_document.encrypt_in_tranit.json
 }
 
-data "aws_iam_policy_document" "encrypt_in_tranit" {
+data "aws_iam_policy_document" "anom_detect_logs_policy" {
   statement {
     sid    = "DenyInsecureTransport"
     effect = "Deny"
@@ -29,8 +29,9 @@ data "aws_iam_policy_document" "encrypt_in_tranit" {
 
     resources = [
       aws_s3_bucket.anom_detect_bucket.arn,
-      "${aws_s3_bucket.anom_detect_bucket.arn}/*",
+      "${aws_s3_bucket.anom_detect_bucket.arn}/*"
     ]
+
     condition {
       test     = "Bool"
       variable = "aws:SecureTransport"
@@ -40,6 +41,48 @@ data "aws_iam_policy_document" "encrypt_in_tranit" {
     principals {
       type        = "*"
       identifiers = ["*"]
+    }
+  }
+
+  statement {
+    sid    = "GetBucketACL"
+    effect = "Allow"
+
+    actions = [
+      "s3:GetBucketAcl",
+    ]
+
+    resources = [
+      aws_s3_bucket.anom_detect_bucket.arn
+    ]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudtrail.amazonaws.com"]
+    }
+  }
+
+  statement {
+    sid    = "S3PutObject"
+    effect = "Allow"
+
+    actions = [
+      "s3:PutObject",
+    ]
+
+    resources = [
+      "${aws_s3_bucket.anom_detect_bucket.arn}/*"
+    ]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudtrail.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "s3:x-amz-acl"
+      values   = ["bucket-owner-full-control"]
     }
   }
 }
