@@ -3,3 +3,4 @@ dist
 .terraform/
 *.auto.tfvars
 .vscode/settings.json
+.github/workflows/

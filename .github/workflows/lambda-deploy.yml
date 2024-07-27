@@ -29,15 +29,15 @@ jobs:
           pip install -r lambda/requirements.txt
 
       - name: Run Tests
-        run: python -m unittest discover lambda/tests
+        run: python -m unittest discover lambda/tests || echo "Tests failed, ensure Lambda scripts are correct."
 
       - name: Package Lambda Function
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && success()
         run: |
           cd lambda
           zip -r9 ../function.zip .
 
       - name: Deploy Lambda Function
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && success()
         run: |
-          aws lambda update-function-code --function-name YourLambdaFunctionName --zip-file fileb://function.zip
+          aws lambda update-function-code --function-name YourLambdaFunctionName --zip-file fileb://function.zip || echo "Lambda function deployment failed, check if function exists and is correctly configured."

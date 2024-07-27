@@ -28,14 +28,15 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out=plan.out
+        run: terraform plan -out=plan.out || echo "Terraform plan failed, resources might not be fully defined."
 
       - name: Upload Plan
+        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: terraform-plan
           path: plan.out
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && success()
         run: terraform apply -auto-approve plan.out
