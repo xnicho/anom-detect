@@ -4,7 +4,7 @@ resource "aws_sagemaker_model" "anomaly_detection_model" {
   execution_role_arn = aws_iam_role.sagemaker_execution_role.arn
 
   primary_container {
-    image          = "123456789012.dkr.ecr.ap-southeast-2.amazonaws.com/anomaly-detection:latest"
+    image          = "128278156308.dkr.ecr.ap-southeast-2.amazonaws.com/anomaly-detection:latest"
     model_data_url = "s3://${aws_s3_bucket.sagemaker_bucket.bucket}/model.tar.gz"
   }
 }
